@@ -3,9 +3,15 @@ const express = require('express')
 const dotenv = require('dotenv')
 const morgan = require('morgan');
 const exphbs = require('express-handlebars');
-const connectDB = require('./config/db')
+const passport = require('passport');
+const session = require('express-session');
+const connectDB = require('./config/db');
+
 //Load config
 dotenv.config({path: '.env'})
+
+//passport config
+require('./config/passport')(passport) // need to pass another argument passport
 
 connectDB();
 
@@ -19,6 +25,17 @@ if(process.env.NODE_ENV === 'development') {
 //Handlebars
 app.engine('.hbs', exphbs({ defaultLayout: 'main', extname: '.hbs'}))
 app.set('view engine', '.hbs')
+
+//Sessions
+app.use(session({
+      secret: process.env.SESSION_SECRET,
+      resave: false,
+      saveUninitialized:false
+}))
+
+//passport middleware
+app.use(passport.initialize());
+app.use(passport.session())
 
 //Static folder
 app.use(express.static(path.join(__dirname, 'public')))

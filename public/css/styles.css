@@ -5,3 +5,13 @@ body {
     #2980b9
   ); /*Left to Right Gradient*/
 }
+
+.login-container {
+  width: 400px;
+  margin-top: 50px;
+  text-align: center;
+}
+
+p {
+  margin: 10px 0 !important;
+}
